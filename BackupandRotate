@@ -1,0 +1,51 @@
+#!/bin/bash
+
+function usage {
+        echo "Usage $0 /path/to/sourceDir /path/to/backupDir"
+}
+
+if [ $# -eq 0 ] || [ ! -d "$1" ] || [ ! -d "$2"  ]; then
+        echo "Please enter a valid arugument"
+        usage
+        exit 1
+fi
+
+source_dir="$1"
+target_dir="$2"
+
+function create_backup {
+
+        local timestamp=$(date "+%Y-%m-%d_%H-%M-%S")
+        local backup_dir="${target_dir}/backup_${timestamp}"    
+        zip -r "${backup_dir}.zip" "${source_dir}" >/dev/null
+
+        if [ $? -eq 0 ]; then
+                echo "back is successfull"
+        else
+                echo "fail to backup"
+        fi
+
+}
+
+function rotate {
+
+        backups=($(ls -t "${target_dir}/backup_"*.zip))
+
+        if [ "${#backups[@]}" -gt 3 ]; then
+
+                backup_removal=("${backups[@]:3}")
+
+                for backs in "${backup_removal[@]}";
+                do
+                        rm -f "$backs"
+
+                done
+
+        fi
+
+}
+
+
+create_backup
+rotate
+                                                                                                                                                                                                                                                                                                                           36,28-42      All
