@@ -1,0 +1,2 @@
+# m h  dom mon dow   command
+* * * * * bash /home/ubuntu/scripts/backup_me.sh /home/ubuntu/scripts /home/ubuntu/backup
